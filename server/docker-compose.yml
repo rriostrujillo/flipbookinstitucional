@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: flipbook
+      POSTGRES_PASSWORD: flipbook_password
+      POSTGRES_DB: flipbook
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flipbook"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://flipbook:flipbook_password@postgres:5432/flipbook
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - BASE_URL=${BASE_URL:-http://localhost:3001}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+
+  frontend:
+    build: ../.
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

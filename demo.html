@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlipBook - Demo de Embedding</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #e94560, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.1rem;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      backdrop-filter: blur(10px);
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: #e94560;
+    }
+
+    .section p {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .embed-demo {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .embed-demo iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0;
+    }
+
+    .params-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .params-table th,
+    .params-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .params-table th {
+      color: #e94560;
+      font-weight: 600;
+    }
+
+    .params-table code {
+      color: #ff6b6b;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #e94560;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>FlipBook</h1>
+      <p class="subtitle">Visor de documentos PDF interactivo como Issuu</p>
+    </header>
+
+    <section class="section">
+      <h2>¿Qué es FlipBook?</h2>
+      <p>
+        FlipBook es una librería que te permite mostrar documentos PDF como revistas 
+        o libros interactivos, con efecto de pasando páginas como Issuu. 
+        Es <strong>embebible</strong> en cualquier página web mediante iframe.
+      </p>
+      
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">📖</div>
+          <h3>Efecto Realista</h3>
+          <p>Animación de pasar páginas suave y natural</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Responsive</h3>
+          <p>Funciona en móvil, tablet y desktop</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔗</div>
+          <h3>Embeddable</h3>
+          <p>Incrustable en cualquier sitio web</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Ligero</h3>
+          <p>Solo ~50KB, sin dependencias pesadas</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Cómo Usar</h2>
+      <p>
+        Simplemente agrega un iframe apuntando a tu servidor FlipBook con el 
+        parámetro <code>pdf</code> indicando la URL del documento:
+      </p>
+
+      <pre><code>&lt;iframe 
+  src="https://tu-servidor.com/?pdf=https://ejemplo.com/documento.pdf"
+  width="100%" 
+  height="500" 
+  frameborder="0"
+&gt;&lt;/iframe&gt;</code></pre>
+
+      <h3 style="margin-top: 24px; margin-bottom: 12px;">Parámetros Disponibles</h3>
+      <table class="params-table">
+        <thead>
+          <tr>
+            <th>Parámetro</th>
+            <th>Descripción</th>
+            <th>Ejemplo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>pdf</code></td>
+            <td>URL del archivo PDF</td>
+            <td><code>?pdf=https://...</code></td>
+          </tr>
+          <tr>
+            <td><code>page</code></td>
+            <td>Página inicial</td>
+            <td><code>&page=3</code></td>
+          </tr>
+          <tr>
+            <td><code>title</code></td>
+            <td>Título del documento</td>
+            <td><code>&title=Mi Revista</code></td>
+          </tr>
+          <tr>
+            <td><code>controls</code></td>
+            <td>Mostrar controles (1/0)</td>
+            <td><code>&controls=0</code></td>
+          </tr>
+          <tr>
+            <td><code>fullscreen</code></td>
+            <td>Habilitar fullscreen (1/0)</td>
+            <td><code>&fullscreen=1</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Demo en Vivo</h2>
+      <p>
+        Aquí tienes un ejemplo de FlipBook embebido. Nota: Necesitas un PDF público 
+        con CORS habilitado para que funcione correctamente.
+      </p>
+      
+      <div class="embed-demo">
+        <iframe 
+          id="demo-frame"
+          src="http://localhost:3000/?pdf=https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf&title=WCAG PDF Table"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Comunicación Padre → Hijo</h2>
+      <p>
+        Puedes controlar el FlipBook desde la página padre usando 
+        <code>postMessage</code>:
+      </p>
+
+      <pre><code>// Ir a una página específica
+iframe.contentWindow.postMessage({
+  type: 'gotoPage',
+  data: { page: 5 }
+}, '*');
+
+// Obtener estado
+iframe.contentWindow.postMessage({
+  type: 'getStatus'
+}, '*');
+
+// Zoom
+iframe.contentWindow.postMessage({
+  type: 'zoomIn'
+}, '*');</code></pre>
+    </section>
+
+    <footer>
+      <p>FlipBook - Creado con ❤️ usando PDF.js y StPageFlip</p>
+    </footer>
+  </div>
+</body>
+</html>

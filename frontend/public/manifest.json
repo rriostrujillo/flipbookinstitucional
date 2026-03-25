@@ -1,0 +1,26 @@
+{
+  "name": "FlipBook",
+  "short_name": "FlipBook",
+  "description": "Crea flipbooks interactivos de tus PDFs como Issuu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7C3AED",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "lang": "es",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}

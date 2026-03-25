@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#7C3AED">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FlipBook">
+  <meta name="application-name" content="FlipBook">
+  <meta name="msapplication-TileColor" content="#7C3AED">
+  <meta name="msapplication-config" content="none">
+  <title>FlipBook - Crea flipbooks interactivos</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body>
+  <div id="app">
+    <nav class="navbar" id="navbar">
+      <div class="nav-brand">
+        <a href="/" class="brand-link">
+          <i class="fas fa-book-open"></i>
+          <span>FlipBook</span>
+        </a>
+      </div>
+      <div class="nav-menu" id="nav-menu">
+        <a href="#" data-page="dashboard" class="nav-link">
+          <i class="fas fa-th-large"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" data-page="upload" class="nav-link">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span>Subir</span>
+        </a>
+      </div>
+      <div class="nav-user" id="nav-user">
+        <button class="user-btn" id="user-menu-btn">
+          <div class="user-avatar" id="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <span class="user-name" id="user-name">Usuario</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="user-dropdown" id="user-dropdown">
+          <a href="#" data-action="logout" class="dropdown-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar sesión</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content" id="main-content">
+      <!-- El contenido se carga dinámicamente -->
+    </main>
+  </div>
+
+  <!-- Modal para vista previa -->
+  <div class="modal" id="preview-modal">
+    <div class="modal-content modal-large">
+      <button class="modal-close" id="modal-close">
+        <i class="fas fa-times"></i>
+      </button>
+      <iframe id="preview-iframe" class="preview-iframe"></iframe>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module" src="/src/js/app.js"></script>
+</body>
+</html>

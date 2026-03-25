@@ -1,0 +1,30 @@
+{
+  "name": "flipbook",
+  "version": "1.0.0",
+  "description": "Issuu-like embeddable PDF flipbook viewer with backend",
+  "private": true,
+  "workspaces": [
+    ".",
+    "server",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "dev:all": "concurrently \"npm run server\" \"npm run frontend\"",
+    "server": "cd server && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "build": "npm run build:frontend",
+    "build:all": "npm run build:server && npm run build:frontend",
+    "build:server": "cd server && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "cd server && npm start"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^4.0.379",
+    "page-flip": "^2.0.7"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.1.0"
+  }
+}
