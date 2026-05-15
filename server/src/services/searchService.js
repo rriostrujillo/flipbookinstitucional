@@ -1,44 +1,32 @@
-import { TextEmbedding } from 'fastembed';
+// FastEmbed search - temporarily disabled (requires model installation)
+// import { TextEmbedding } from 'fastembed';
 import { query } from '../models/db.js';
 import { extractTextFromPDF } from './pdfProcessor.js';
 
 let embeddingModel = null;
 
 async function getEmbeddingModel() {
-  if (!embeddingModel) {
-    console.log('📥 Loading FastEmbed model (first time may take a moment)...');
-    embeddingModel = TextEmbedding.fromModel("BAAI/bge-small-en-v1.5", {
-      maxLength: 512
-    });
-    await embeddingModel.initialize();
-    console.log('✅ FastEmbed model loaded!');
-  }
-  return embeddingModel;
+  // Placeholder - search functionality available but model not loaded
+  console.log('📚 Search service ready (semantic search disabled - no model)');
+  return null;
 }
 
 export async function semanticSearch(userQuery, userId, limit = 10, offset = 0) {
+  // Fallback to basic title search
   try {
-    const model = await getEmbeddingModel();
-    const embeddingResult = await model.embed(userQuery);
-    const embedding = Array.from(embeddingResult);
-    
     const result = await query(
-      `SELECT d.id, d.title, d.description, d.thumbnail_path, d.page_count,
-              d.views_count, d.created_at,
-              (dc.embedding <=> $1::vector) as similarity,
-              dc.chunk_text,
-              dc.page_number
-       FROM document_chunks dc
-       JOIN documents d ON dc.document_id = d.id
-       WHERE d.user_id = $2
-       ORDER BY dc.embedding <=> $1::vector
+      `SELECT id, title, description, thumbnail_path, page_count, views_count, created_at
+       FROM documents 
+       WHERE user_id = $1 AND (title ILIKE $2 OR description ILIKE $2)
+       ORDER BY created_at DESC
        LIMIT $3 OFFSET $4`,
-      [JSON.stringify(embedding), userId, limit, offset]
+      [userId, `%${userQuery}%`, limit, offset]
     );
 
-    const groupedResults = groupByDocument(result.rows);
-    
-    return groupedResults;
+    return result.rows.map(doc => ({
+      ...doc,
+      matches: []
+    }));
   } catch (error) {
     console.error('Search error:', error);
     return [];

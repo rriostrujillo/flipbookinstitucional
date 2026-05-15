@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "id": "dfbb7b93-5dd6-4d56-a448-c1be864f3996",
+      "email": "test@test.com",
+      "password_hash": "$2a$10$VRJbtUXd554ahZdgwTt6TuKQqW43j/e72KqylIX4UwpBwoEOZE9H6",
+      "name": "Test User",
+      "avatar_url": null,
+      "google_id": null,
+      "github_id": null,
+      "plan": "free",
+      "created_at": "2026-05-14T21:49:41.044Z",
+      "updated_at": "2026-05-14T21:49:41.044Z"
+    },
+    {
+      "id": "62a4cd32-4a6f-4575-a1c0-c4269cd019a5",
+      "email": "demo@test.com",
+      "password_hash": "$2a$10$7ZPUu4vMT15mMJGh5GGmhOQCr.gNW2Kqubc/wM4iSf6yx37r7Nxr.",
+      "name": "Demo User",
+      "avatar_url": null,
+      "google_id": null,
+      "github_id": null,
+      "plan": "free",
+      "created_at": "2026-05-14T21:52:22.070Z",
+      "updated_at": "2026-05-14T21:52:22.070Z"
+    }
+  ],
+  "documents": [],
+  "document_chunks": [],
+  "document_analytics": []
+}

@@ -7,6 +7,7 @@ import { query } from '../models/db.js';
 import { processPDF } from '../services/pdfProcessor.js';
 import { generateEmbedCode } from '../services/embedService.js';
 import { optionalAuth } from '../middleware/auth.js';
+import { downloadPDF, isValidPDFUrl } from '../services/pdfDownloader.js';
 
 const router = express.Router();
 
@@ -272,6 +273,106 @@ router.get('/:id/embed', async (req, res, next) => {
     const embedCode = generateEmbedCode(doc.id, baseUrl);
 
     res.json({ embed_code: embedCode, document_id: id });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// NEW: Import PDF from external URL
+router.post('/import-url', async (req, res, next) => {
+  try {
+    const { url, title, description } = req.body;
+
+    if (!url || !isValidPDFUrl(url)) {
+      return res.status(400).json({ 
+        error: 'Invalid URL. Provide a valid URL ending with .pdf' 
+      });
+    }
+
+    // Download PDF from external URL
+    const downloaded = await downloadPDF(url);
+
+    // Extract filename from URL for original name
+    const urlObj = new URL(url);
+    const originalFilename = urlObj.pathname.split('/').pop() || 'document.pdf';
+
+    // Save to database
+    const result = await query(
+      `INSERT INTO documents 
+       (user_id, title, description, original_filename, file_path, file_size, status) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7) 
+       RETURNING *`,
+      [
+        req.user.id,
+        title || originalFilename.replace('.pdf', ''),
+        description || null,
+        originalFilename,
+        downloaded.filename,
+        downloaded.size,
+        'processing'
+      ]
+    );
+
+    const document = result.rows[0];
+
+    // Process the PDF
+    try {
+      const processed = await processPDF(downloaded.filename, document.id);
+      
+      await query(
+        `UPDATE documents 
+         SET page_count = $1, thumbnail_path = $2, status = 'ready', updated_at = NOW()
+         WHERE id = $3`,
+        [processed.pageCount, processed.thumbnail, document.id]
+      );
+
+      document.page_count = processed.pageCount;
+      document.thumbnail_path = processed.thumbnail;
+      document.status = 'ready';
+
+      if (process.env.BASE_URL) {
+        document.embed_code = generateEmbedCode(document.id, process.env.BASE_URL);
+      }
+
+      res.status(201).json({ document });
+    } catch (processError) {
+      await query(
+        'UPDATE documents SET status = $1, updated_at = NOW() WHERE id = $2',
+        ['error', document.id]
+      );
+      
+      throw processError;
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// NEW: Get PDF directly from external URL (for embedding)
+router.get('/external-view', async (req, res, next) => {
+  try {
+    const { url } = req.query;
+
+    if (!url || !isValidPDFUrl(url)) {
+      return res.status(400).json({ 
+        error: 'Invalid URL parameter. Provide a valid URL ending with .pdf' 
+      });
+    }
+
+    // Download and stream the PDF
+    const downloaded = await downloadPDF(url);
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline');
+    
+    const fs = await import('fs');
+    const stream = fs.createReadStream(downloaded.filePath);
+    stream.pipe(res);
+    
+    stream.on('end', () => {
+      // Clean up after sending
+      fs.unlink(downloaded.filePath).catch(() => {});
+    });
   } catch (error) {
     next(error);
   }

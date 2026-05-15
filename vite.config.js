@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-  base: '/flipbookinstitucional/',
-  root: '.',
-  publicDir: 'public',
+  base: '/',
+  root: './frontend',
+  publicDir: '../public',
   build: {
     outDir: 'dist',
     emptyOutDir: true

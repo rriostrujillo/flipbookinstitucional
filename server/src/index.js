@@ -16,6 +16,7 @@ import searchRoutes from './routes/search.js';
 import analyticsRoutes from './routes/analytics.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { authenticate } from './middleware/auth.js';
+import { initDatabase } from './models/db.js';
 
 dotenv.config();
 
@@ -24,6 +25,9 @@ const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Initialize database before starting server
+await initDatabase();
 
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
